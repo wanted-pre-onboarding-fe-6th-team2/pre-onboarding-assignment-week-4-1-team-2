@@ -1,23 +1,12 @@
-# React-Vite-JS-Boilerplate
+# 디셈버앤컴퍼니(핀트) 채용 과제
 
-Vite에서 제공하는 (React + Vite + JavaScript) + 추가적인 프로젝트 초기 세팅을 기반으로 한 보일러 플레이트입니다.
+## 실행 방법
 
-## 의존성
+```sh
+yarn install
 
-보일러 플레이트에 포함 된 의존성은 다음과 같습니다.
+yarn workspace backend start
 
-### dependencies
-
-- emotion
-- react-router-dom
-
-### devDependencies
-
-- eslint
-- prettier
-- husky
-- lint-staged
-
----
-
-많이 부족한 보일러 플레이트이니 피드백은 언제나 환영입니다 😊
+# 새로운 터미널에서
+yarn workspace frontend dev
+```
