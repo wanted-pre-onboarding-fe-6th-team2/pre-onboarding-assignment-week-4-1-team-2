@@ -9,10 +9,28 @@
   "bugs": {
     "url": "https://github.com/wanted-pre-onboarding-fe-6th-team2/pre-onboarding-assignment-week-4-1-team-2/issues"
   },
+  "scripts": {
+    "prepare": "husky install",
+    "lint:code": "eslint --ext .js,.jsx",
+    "lint:code-fix": "eslint --fix --ext .js,.jsx",
+    "lint:output-html": "npx eslint --ext .js,.jsx . -f html -o eslint-result.html --quiet",
+    "prettier:code-fix": "prettier --write"
+  },
   "workspaces": {
     "packages": [
       "backend",
       "frontend"
+    ]
+  },
+  "lint-staged": {
+    "*.json": [
+      "yarn prettier:code-fix"
+    ],
+    ".*rc": [
+      "yarn prettier:code-fix"
+    ],
+    "*.{js,jsx}": [
+      "yarn lint:code-fix --cache"
     ]
   },
   "engines": {
