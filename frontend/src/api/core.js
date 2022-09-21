@@ -2,7 +2,7 @@ import axios from 'axios';
 import { LOCAL_STORAGE_KEYS } from '@/constants/localStorage';
 import { HTTP_METHODS } from '@/constants/http';
 
-const BASE_URL = 'http://localhost:4000/';
+const BASE_URL = 'http://localhost:4000';
 
 const handleRequest = config => {
   const TOKEN = localStorage.getItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
@@ -47,19 +47,7 @@ const createHttpRequest = () => {
     },
   });
 
-  const axiosResponseInterceptor = response => {
-    const totalCount = response.headers['x-total-count'];
-
-    if (totalCount) {
-      return { ...response, data: { data: response.data, totalCount } };
-    }
-
-    return response;
-  };
-
   const createApiMethod = methodType => config => {
-    axiosInstance.interceptors.response.use(axiosResponseInterceptor);
-
     return axiosInstance({ ...handleRequest(config), method: methodType })
       .then(handleResponse)
       .catch(handleError);
