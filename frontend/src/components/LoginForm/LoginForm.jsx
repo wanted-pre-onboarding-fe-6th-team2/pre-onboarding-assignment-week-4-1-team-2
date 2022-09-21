@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { emailValidator, passwordLengthValidator } from '@/utils/validator';
 
 const LoginForm = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -6,17 +7,6 @@ const LoginForm = () => {
 
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
-
-  const emailValidator = email => {
-    const regEmail =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-
-    return regEmail.test(email);
-  };
-
-  const passwordLengthValidator = (password, minLength) => {
-    return password.length >= minLength;
-  };
 
   const handleIdChange = event => {
     const { value } = event.target;
