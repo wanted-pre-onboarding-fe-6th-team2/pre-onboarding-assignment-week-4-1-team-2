@@ -1,6 +1,6 @@
 const jsonServer = require('json-server');
-
 const auth = require('json-server-auth');
+const cors = require('cors');
 
 const app = jsonServer.create();
 const router = jsonServer.router('db.json');
@@ -12,6 +12,12 @@ const rules = auth.rewriter({
   accounts: 660,
 });
 
+const corsOption = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
+
+app.use(cors(corsOption));
 app.use(rules);
 app.use(auth);
 app.use(router);
