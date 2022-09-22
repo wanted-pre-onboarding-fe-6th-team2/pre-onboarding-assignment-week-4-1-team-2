@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Input, Button, Center } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
 import { emailValidator, passwordLengthValidator } from '@/utils/validator';
-import authApiService from '@/api/authApiService';
+import { authActions } from '@/store/modules/auth';
 
 const LoginForm = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -9,6 +10,10 @@ const LoginForm = () => {
 
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+
+  const { isLoading } = useSelector(state => state.auth);
+
+  const dispatch = useDispatch();
 
   const handleIdChange = event => {
     const { value } = event.target;
@@ -24,9 +29,13 @@ const LoginForm = () => {
 
   const handleLogin = async event => {
     event.preventDefault();
-    const response = await authApiService.login({ email: emailInput, password: passwordInput });
 
-    localStorage.setItem('token', response.accessToken);
+    dispatch(
+      authActions.loginMiddleware({
+        email: emailInput,
+        password: passwordInput,
+      })
+    );
   };
 
   return (
@@ -50,9 +59,15 @@ const LoginForm = () => {
           size="md"
           mb="1em"
         />
-        <Button type="submit" onClick={handleLogin} colorScheme="teal" width="100%" size="md">
-          로그인
-        </Button>
+        {isLoading ? (
+          <Button isLoading colorScheme="teal" width="100%" size="md">
+            로그인
+          </Button>
+        ) : (
+          <Button type="submit" onClick={handleLogin} colorScheme="teal" width="100%" size="md">
+            로그인
+          </Button>
+        )}
       </form>
     </Center>
   );
