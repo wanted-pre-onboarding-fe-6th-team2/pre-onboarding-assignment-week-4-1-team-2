@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Input, Button, Center } from '@chakra-ui/react';
 import { emailValidator, passwordLengthValidator } from '@/utils/validator';
+import authApiService from '@/api/authApiService';
 
 const LoginForm = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -20,19 +22,39 @@ const LoginForm = () => {
     setIsValidPassword(passwordLengthValidator(value, 8));
   };
 
+  const handleLogin = async event => {
+    event.preventDefault();
+    const response = await authApiService.login({ email: emailInput, password: passwordInput });
+
+    localStorage.setItem('token', response.accessToken);
+  };
+
   return (
-    <form>
-      {emailInput && !isValidEmail && <p>올바른 아이디를 입력해주세요.</p>}
-      <input type="text" id="email" placeholder="아이디를 입력하세요" onChange={handleIdChange} />
-      {passwordInput && !isValidPassword && <p>8글자 이상의 비밀번호를 입력해주세요.</p>}
-      <input
-        type="text"
-        id="password"
-        placeholder="비밀번호를 입력하세요"
-        onChange={handlePasswordChange}
-      />
-      <button type="submit">로그인</button>
-    </form>
+    <Center h="100vh">
+      <form>
+        {emailInput && !isValidEmail && <p>올바른 아이디를 입력해주세요.</p>}
+        <Input
+          type="text"
+          id="email"
+          placeholder="아이디를 입력하세요"
+          onChange={handleIdChange}
+          size="md"
+          mb="1em"
+        />
+        {passwordInput && !isValidPassword && <p>8글자 이상의 비밀번호를 입력해주세요.</p>}
+        <Input
+          type="text"
+          id="password"
+          placeholder="비밀번호를 입력하세요"
+          onChange={handlePasswordChange}
+          size="md"
+          mb="1em"
+        />
+        <Button type="submit" onClick={handleLogin} colorScheme="teal" width="100%" size="md">
+          로그인
+        </Button>
+      </form>
+    </Center>
   );
 };
 
