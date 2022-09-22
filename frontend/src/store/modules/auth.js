@@ -8,6 +8,7 @@ const AUTH_LOGOUT = 'auth/LOGOUT';
 const INITIAL_STATE = {
   isLoading: false,
   error: null,
+  isAuthenticated: false,
   currentUser: {
     accessToken: '',
     user: {
@@ -38,8 +39,10 @@ const logoutMiddleware = createAsyncThunk(AUTH_LOGOUT, async () => {
   return INITIAL_STATE.currentUser;
 });
 
+export const AUTH_REDUCER_NAME = 'auth';
+
 const authSlice = createSlice({
-  name: 'auth',
+  name: AUTH_REDUCER_NAME,
   initialState: INITIAL_STATE,
   extraReducers: {
     [loginMiddleware.pending]: state => {
@@ -47,6 +50,7 @@ const authSlice = createSlice({
     },
     [loginMiddleware.fulfilled]: (state, action) => {
       state.isLoading = false;
+      state.isAuthenticated = true;
       state.currentUser = action.payload;
     },
     [loginMiddleware.rejected]: (state, action) => {
@@ -54,6 +58,7 @@ const authSlice = createSlice({
       state.error = action.error;
     },
     [logoutMiddleware.fulfilled]: (state, action) => {
+      state.isAuthenticated = false;
       state.currentUser = action.payload;
     },
   },
