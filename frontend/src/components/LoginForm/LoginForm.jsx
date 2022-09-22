@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Flex, Alert, AlertIcon, FormControl, Input, Text, Button } from '@chakra-ui/react';
+import { Flex, FormControl, Input, Text, Button } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { emailValidator, passwordLengthValidator } from '@/utils/validator';
 import { authActions } from '@/store/modules/auth';
 import { ROUTES } from '@/constants/routes';
-import useUnauthorizedAlert from '@/hooks/useUnauthorizedAlert';
 
 const LoginForm = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -14,7 +13,6 @@ const LoginForm = () => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
-  const [isShown] = useUnauthorizedAlert();
   const { isLoading } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
@@ -47,12 +45,6 @@ const LoginForm = () => {
 
   return (
     <Flex direction="column">
-      {isShown && (
-        <Alert status="warning" mb="1em">
-          <AlertIcon />
-          세션이 만료되었습니다. 다시 로그인해주세요.
-        </Alert>
-      )}
       <FormControl>
         {emailInput && !isValidEmail && (
           <Text
