@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Input, Button, Center } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { emailValidator, passwordLengthValidator } from '@/utils/validator';
 import { authActions } from '@/store/modules/auth';
+import { ROUTES } from '@/constants/routes';
 
 const LoginForm = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -14,6 +16,7 @@ const LoginForm = () => {
   const { isLoading } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleIdChange = event => {
     const { value } = event.target;
@@ -36,6 +39,8 @@ const LoginForm = () => {
         password: passwordInput,
       })
     );
+
+    navigate(ROUTES.HOME);
   };
 
   return (
