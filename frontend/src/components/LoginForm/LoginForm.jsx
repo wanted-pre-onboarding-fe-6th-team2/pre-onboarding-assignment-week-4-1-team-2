@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Input, Button, Center } from '@chakra-ui/react';
+import { Flex, Alert, AlertIcon, FormControl, Input, Text, Button } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { emailValidator, passwordLengthValidator } from '@/utils/validator';
 import { authActions } from '@/store/modules/auth';
 import { ROUTES } from '@/constants/routes';
+import useUnauthorizedAlert from '@/hooks/useUnauthorizedAlert';
 
 const LoginForm = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -13,6 +14,7 @@ const LoginForm = () => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
+  const [isShown] = useUnauthorizedAlert();
   const { isLoading } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
@@ -44,25 +46,57 @@ const LoginForm = () => {
   };
 
   return (
-    <Center h="100vh">
-      <form>
-        {emailInput && !isValidEmail && <p>올바른 아이디를 입력해주세요.</p>}
+    <Flex direction="column">
+      {isShown && (
+        <Alert status="warning" mb="1em">
+          <AlertIcon />
+          세션이 만료되었습니다. 다시 로그인해주세요.
+        </Alert>
+      )}
+      <FormControl>
+        {emailInput && !isValidEmail && (
+          <Text
+            fontSize="xs"
+            color="#ff0000"
+            width="100%"
+            align="right"
+            pos="absolute"
+            top="0"
+            right="0"
+          >
+            올바른 아이디를 입력해주세요.
+          </Text>
+        )}
         <Input
           type="text"
           id="email"
           placeholder="이메일을 입력하세요"
           onChange={handleIdChange}
           size="md"
-          mb="1em"
+          width="100%"
+          my="1em"
         />
-        {passwordInput && !isValidPassword && <p>8글자 이상의 비밀번호를 입력해주세요.</p>}
+        {passwordInput && !isValidPassword && (
+          <Text
+            fontSize="xs"
+            color="#f00"
+            width="100%"
+            align="right"
+            pos="absolute"
+            top="6em"
+            right="0"
+          >
+            8글자 이상의 비밀번호를 입력해주세요.
+          </Text>
+        )}
         <Input
           type="text"
           id="password"
           placeholder="비밀번호를 입력하세요"
           onChange={handlePasswordChange}
           size="md"
-          mb="1em"
+          width="100%"
+          my="1em"
         />
         {isLoading ? (
           <Button isLoading colorScheme="teal" width="100%" size="md">
@@ -73,8 +107,8 @@ const LoginForm = () => {
             로그인
           </Button>
         )}
-      </form>
-    </Center>
+      </FormControl>
+    </Flex>
   );
 };
 
