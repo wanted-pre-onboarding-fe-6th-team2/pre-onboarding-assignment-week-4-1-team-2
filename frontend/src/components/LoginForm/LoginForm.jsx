@@ -70,6 +70,7 @@ const LoginForm = () => {
         <Input
           type="text"
           id="email"
+          required
           placeholder="이메일을 입력하세요"
           onChange={handleIdChange}
           size="md"
@@ -90,8 +91,9 @@ const LoginForm = () => {
           </Text>
         )}
         <Input
-          type="text"
+          type="password"
           id="password"
+          required
           placeholder="비밀번호를 입력하세요"
           onChange={handlePasswordChange}
           size="md"
@@ -103,7 +105,14 @@ const LoginForm = () => {
             로그인
           </Button>
         ) : (
-          <Button type="submit" onClick={handleLogin} colorScheme="teal" width="100%" size="md">
+          <Button
+            type="submit"
+            disabled={!isValidEmail || !isValidPassword}
+            onClick={handleLogin}
+            colorScheme="teal"
+            width="100%"
+            size="md"
+          >
             로그인
           </Button>
         )}
