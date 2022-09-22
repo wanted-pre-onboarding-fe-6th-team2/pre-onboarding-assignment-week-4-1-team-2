@@ -8,6 +8,7 @@ const AUTH_LOGOUT = 'auth/LOGOUT';
 const INITIAL_STATE = {
   isLoading: false,
   error: null,
+  isAuthenticated: false,
   currentUser: {
     accessToken: '',
     user: {
@@ -49,6 +50,7 @@ const authSlice = createSlice({
     },
     [loginMiddleware.fulfilled]: (state, action) => {
       state.isLoading = false;
+      state.isAuthenticated = true;
       state.currentUser = action.payload;
     },
     [loginMiddleware.rejected]: (state, action) => {
@@ -56,6 +58,7 @@ const authSlice = createSlice({
       state.error = action.error;
     },
     [logoutMiddleware.fulfilled]: (state, action) => {
+      state.isAuthenticated = false;
       state.currentUser = action.payload;
     },
   },
