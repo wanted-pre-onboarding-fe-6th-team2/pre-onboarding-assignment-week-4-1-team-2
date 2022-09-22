@@ -5,19 +5,20 @@ import LoginForm from '@/components/LoginForm/LoginForm';
 import { LOCAL_STORAGE_KEYS } from '@/constants/localStorage';
 
 const Login = () => {
-  const [hasToken, setHasToken] = useState(true);
+  const [isShown, setIsShown] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setHasToken(!!localStorage.getItem(LOCAL_STORAGE_KEYS));
+    const hasToken = !!localStorage.getItem(LOCAL_STORAGE_KEYS);
+    setIsShown(!hasToken);
 
     if (hasToken) navigate('/');
-  }, [hasToken, navigate]);
+  }, [navigate]);
 
   return (
     <Container maxW="md" centerContent>
-      {!hasToken && (
+      {isShown && (
         <Alert status="warning">
           <AlertIcon />
           세션이 만료되었습니다. 다시 로그인해주세요.
