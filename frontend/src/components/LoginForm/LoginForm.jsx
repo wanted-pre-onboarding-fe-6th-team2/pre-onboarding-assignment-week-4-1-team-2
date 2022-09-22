@@ -45,7 +45,7 @@ const LoginForm = () => {
         <Input
           type="text"
           id="email"
-          placeholder="아이디를 입력하세요"
+          placeholder="이메일을 입력하세요"
           onChange={handleIdChange}
           size="md"
           mb="1em"
