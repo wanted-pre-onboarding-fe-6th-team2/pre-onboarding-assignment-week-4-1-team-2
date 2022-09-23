@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
-import { Text } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { Avatar, Text } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 import { FoldButton, HeaderContainer, LeftBox, RightBox } from './Header.styled';
+import userApiService from '@/api/userApiService';
 
-const Header = ({ collapsed, setCollapsed }) => {
-  const { pathname } = useLocation();
+const Header = ({ pageName, collapsed, setCollapsed }) => {
+  const { id } = useSelector(state => state.auth).currentUser.user;
+  const [userName, setUserName] = useState();
+
+  const getUserName = useCallback(async () => {
+    const userResponse = await userApiService.getUser({ userId: id });
+    if (!userResponse.name) {
+      setUserName('관리자');
+      return;
+    }
+    setUserName(userResponse.name);
+  }, [id]);
+
+  useEffect(() => {
+    getUserName();
+  }, [getUserName]);
 
   return (
     <HeaderContainer p="2" area="header">
@@ -13,13 +28,14 @@ const Header = ({ collapsed, setCollapsed }) => {
         <FoldButton type="button" onClick={() => setCollapsed(prev => !prev)}>
           {collapsed ? <ArrowRightIcon /> : <ArrowLeftIcon />}
         </FoldButton>
-        <Text ml={3}>{pathname}</Text>
+        <Text ml={3}>{pageName}</Text>
       </LeftBox>
       <RightBox>
-        <Text>유저명</Text>
+        <Avatar mr={3} size="sm" bg="teal.500" />
+        <Text w={30}>{userName}</Text>
       </RightBox>
     </HeaderContainer>
   );
 };
 
-export default Header;
+export default React.memo(Header);
