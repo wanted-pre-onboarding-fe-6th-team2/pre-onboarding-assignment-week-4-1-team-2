@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { Table, Thead, Tbody, Tr, Th, Td, Button, Input, Flex, Container } from '@chakra-ui/react';
 import accountApiService from '@/api/accountApiService';
 import AccountUserName from '@/components/accountList/AccountUserName/AccountUserName';
 import BrokerName from '@/components/accountList/BrokerName/BrokerName';
@@ -58,59 +59,61 @@ const AccountListBoard = () => {
 
   return (
     <>
-      <div>
-        <input name="search" value={word} onChange={handleChangeKeyword} />
-        <button type="button" onClick={handleSearch}>
-          검색
-        </button>
-      </div>
-      <table style={{ textAlign: 'center' }}>
-        <thead>
-          <tr>
-            <th>고객명</th>
-            <th>
-              <button type="button" onClick={handleFilter} name="broker_id">
+      <Container maxW="md">
+        <Flex>
+          <Input name="search" value={word} onChange={handleChangeKeyword} />
+          <Button type="Button" onClick={handleSearch}>
+            검색
+          </Button>
+        </Flex>
+      </Container>
+      <Table style={{ textAlign: 'center' }}>
+        <Thead>
+          <Tr>
+            <Th>고객명</Th>
+            <Th>
+              <Button type="Button" onClick={handleFilter} name="broker_id">
                 브로커명
-              </button>
-            </th>
-            <th>계좌번호</th>
-            <th onClick={handleFilter}>
-              <button type="button" onClick={handleFilter} name="status">
+              </Button>
+            </Th>
+            <Th>계좌번호</Th>
+            <Th onClick={handleFilter}>
+              <Button type="Button" onClick={handleFilter} name="status">
                 계좌상태
-              </button>
-            </th>
-            <th>계좌명</th>
-            <th>평가금액</th>
-            <th>입금금액</th>
-            <th onClick={handleFilter}>
-              <button type="button" onClick={handleFilter} name="is_active">
+              </Button>
+            </Th>
+            <Th>계좌명</Th>
+            <Th>평가금액</Th>
+            <Th>입금금액</Th>
+            <Th onClick={handleFilter}>
+              <Button type="Button" onClick={handleFilter} name="is_active">
                 계좌활성화여부
-              </button>
-            </th>
-            <th>계좌개설일</th>
-          </tr>
-        </thead>
-        <tbody>
+              </Button>
+            </Th>
+            <Th>계좌개설일</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {accountList.map(account => (
-            <tr key={account.uuid}>
-              <td>
+            <Tr key={account.uuid}>
+              <Td>
                 <Link to={`${account.user_id}`}>
                   <AccountUserName userId={account.user_id} />
                 </Link>
-              </td>
-              <td>
+              </Td>
+              <Td>
                 <BrokerName brokerId={account.broker_id} />
-              </td>
-              <td>
+              </Td>
+              <Td>
                 <Link to={`${account.number}`}>
                   <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
                 </Link>
-              </td>
-              <td>
+              </Td>
+              <Td>
                 <AccountStatusName status={account.status} />
-              </td>
-              <td>{account.name}</td>
-              <td
+              </Td>
+              <Td>{account.name}</Td>
+              <Td
                 style={
                   account.assets > account.payments
                     ? { color: 'red' }
@@ -120,14 +123,14 @@ const AccountListBoard = () => {
                 }
               >
                 {Number(account.assets).toLocaleString()}
-              </td>
-              <td>{Number(account.payments).toLocaleString()}</td>
-              <td>{account.is_active ? 'Y' : 'N'}</td>
-              <td>{new Date(account.created_at).toLocaleDateString()}</td>
-            </tr>
+              </Td>
+              <Td>{Number(account.payments).toLocaleString()}</Td>
+              <Td>{account.is_active ? 'Y' : 'N'}</Td>
+              <Td>{new Date(account.created_at).toLocaleDateString()}</Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
+        </Tbody>
+      </Table>
     </>
   );
 };

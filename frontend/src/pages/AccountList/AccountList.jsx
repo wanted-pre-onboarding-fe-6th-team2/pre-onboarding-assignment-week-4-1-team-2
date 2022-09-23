@@ -1,11 +1,12 @@
 import React from 'react';
+import { Container } from '@chakra-ui/react';
 import AccountListBoard from '@/components/accountList/AccountListBoard/AccountListBoard';
 
 const AccountList = () => {
   return (
-    <div>
+    <Container maxW="full">
       <AccountListBoard />
-    </div>
+    </Container>
   );
 };
 export default AccountList;
