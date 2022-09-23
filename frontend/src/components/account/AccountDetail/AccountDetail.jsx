@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import moment from 'moment';
 import UserName from '@/components/account/UserName/UserName';
 import InnerHeading from '@/components/common/InnerHeading/InnerHeading';
 import BrokerName from '@/components/common/BrokerName/BrokerName';
@@ -38,7 +39,7 @@ const AccountDetail = ({ account }) => {
             <Td>
               <BrokerName brokerId={account.broker_id} />
             </Td>
-            <Td>{new Date(account.created_at).toLocaleString()}</Td>
+            <Td>{moment(new Date(account.created_at)).format('LL')}</Td>
           </Tr>
         </Tbody>
         <Thead>
