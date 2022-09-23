@@ -4,6 +4,7 @@ import moment from 'moment';
 import accountApiService from '@/api/accountApiService';
 import AccountNameLink from '@/components/user/AccountNameLink/AccountNameLink';
 import BrokerName from '@/components/common/BrokerName/BrokerName';
+import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
 
 const UserAccounts = ({ userId }) => {
   const [userAccounts, setUserAccounts] = useState([]);
@@ -72,10 +73,12 @@ const UserAccounts = ({ userId }) => {
                     : 'blue'
                 }
               >
-                {Math.round(+account.assets).toLocaleString()}
+                {Math.round(account.assets).toLocaleString()}
               </Td>
-              <Td>{Math.round(+account.payments).toLocaleString()}</Td>
-              <Td>{account.status}</Td>
+              <Td>{Math.round(account.payments).toLocaleString()}</Td>
+              <Td>
+                <AccountStatus status={account.status} />
+              </Td>
             </Tr>
           </Tbody>
         ))}

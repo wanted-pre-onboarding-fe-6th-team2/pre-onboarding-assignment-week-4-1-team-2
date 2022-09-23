@@ -4,6 +4,7 @@ import moment from 'moment';
 import UserName from '@/components/account/UserName/UserName';
 import InnerHeading from '@/components/common/InnerHeading/InnerHeading';
 import BrokerName from '@/components/common/BrokerName/BrokerName';
+import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
 
 const AccountDetail = ({ account }) => {
   return (
@@ -35,7 +36,9 @@ const AccountDetail = ({ account }) => {
         </Thead>
         <Tbody>
           <Tr>
-            <Td>{account.status}</Td>
+            <Td>
+              <AccountStatus status={account.status} />
+            </Td>
             <Td>
               <BrokerName brokerId={account.broker_id} />
             </Td>
@@ -60,9 +63,9 @@ const AccountDetail = ({ account }) => {
                   : 'blue'
               }
             >
-              {Math.round(+account.assets).toLocaleString()}
+              {Math.round(account.assets).toLocaleString()}
             </Td>
-            <Td>{Math.round(+account.payments).toLocaleString()}</Td>
+            <Td>{Math.round(account.payments).toLocaleString()}</Td>
             <Td color={account.is_active ? 'blue' : 'red'}>
               {account.is_active ? '활성화' : '비활성화'}
             </Td>
