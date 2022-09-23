@@ -1,11 +1,12 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import UserAccounts from '@/components/user/UserAccounts/UserAccounts';
+import InnerHeading from '@/components/common/InnerHeading/InnerHeading';
 
 const UserDetail = ({ user, userSetting }) => {
-  console.log(user);
   return (
     <>
+      <InnerHeading title="고객 정보" />
       <Table size="lg" variant="simple" fontSize="1.25em">
         <Thead>
           <Tr>
@@ -50,6 +51,7 @@ const UserDetail = ({ user, userSetting }) => {
           </Tr>
         </Tbody>
       </Table>
+      <InnerHeading title="보유 계좌 목록" />
       <UserAccounts userId={user.id} />
     </>
   );
