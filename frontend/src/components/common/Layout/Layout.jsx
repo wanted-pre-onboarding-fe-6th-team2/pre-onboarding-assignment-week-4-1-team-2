@@ -4,7 +4,7 @@ import Header from '@/components/common/Layout/Header/Header';
 import Footer from '@/components/common/Layout/Footer/Footer';
 import Sidebar from '@/components/common/Layout/Sidebar/Sidebar';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, pageName }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -18,9 +18,9 @@ const Layout = ({ children }) => {
       color="blackAlpha.700"
       fontWeight="bold"
     >
-      <Header collapsed={collapsed ? 1 : 0} setCollapsed={setCollapsed} />
+      <Header pageName={pageName} collapsed={collapsed ? 1 : 0} setCollapsed={setCollapsed} />
       <Sidebar collapsed={collapsed ? 1 : 0} />
-      <GridItem p="2" bg="gray.100" area="main">
+      <GridItem p="3" bg="gray.100" area="main">
         {children}
       </GridItem>
       <Footer />
