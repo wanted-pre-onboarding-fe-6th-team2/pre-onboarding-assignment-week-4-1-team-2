@@ -7,8 +7,21 @@ const accountApiService = {
     return accountsResponse.length;
   },
 
-  getAccounts: ({ page, limit } = { page: 1, limit: 20 }) =>
-    http.get({ url: `/accounts?_page=${page}&_limit=${limit}` }),
+  getAccounts: (
+    { page, limit, keyword, sort, order, queryString } = {
+      page: 1,
+      limit: 20,
+      keyword: '',
+      sort: '',
+      order: 'asc',
+      queryString: '',
+    }
+  ) =>
+    http.get({
+      url: `/accounts?_page=${page}&_limit=${limit}${
+        keyword ? `&q=${keyword}` : ''
+      }&_sort=${sort}&_order=${order}&${queryString}`,
+    }),
 
   getAccount: ({ accountId }) => http.get({ url: `/accounts/${accountId}` }),
 };
