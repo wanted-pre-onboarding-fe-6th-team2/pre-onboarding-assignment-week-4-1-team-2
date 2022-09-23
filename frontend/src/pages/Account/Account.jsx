@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Container } from '@chakra-ui/react';
 import accountApiService from '@/api/accountApiService';
-import AccountDetail from '@/components/AccountDetail/AccountDetail';
+import AccountDetail from '@/components/account/AccountDetail/AccountDetail';
 
 const Account = () => {
   const { accountId } = useParams();
@@ -17,10 +18,9 @@ const Account = () => {
   }, [accountId]);
 
   return (
-    <div>
-      <h1>AccountDetail</h1>
+    <Container maxW="90%">
       <AccountDetail account={accountInfo} />
-    </div>
+    </Container>
   );
 };
 
