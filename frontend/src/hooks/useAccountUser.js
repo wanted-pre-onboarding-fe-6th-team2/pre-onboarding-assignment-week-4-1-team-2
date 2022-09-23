@@ -14,7 +14,7 @@ export const useAccountUser = userId => {
       }
     };
 
-    fetchUser();
+    if (userId) fetchUser();
   }, [userId]);
 
   return name;
