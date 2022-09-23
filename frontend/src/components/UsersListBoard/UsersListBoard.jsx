@@ -1,10 +1,14 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useTable, useSortBy, disabledSort } from 'react-table';
+import { useNavigate } from 'react-router-dom';
+import { useTable, useSortBy, disabledSort, usePagination } from 'react-table';
+import { Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
 import userSettingApiService from '@/api/userSettingApiService';
 import userApiService from '@/api/userApiService';
 import accountApiService from '@/api/accountApiService';
+import UpdateUserName from '@/components/UsersListBoard/UpdateUserName';
 
 const UsersList = ({ columns, usersData }) => {
+  const navigate = useNavigate();
   const [newData, setNewData] = useState([]);
   const processingData = useCallback(async () => {
     const processingUsersData = usersData.map(async user => {
@@ -44,6 +48,7 @@ const UsersList = ({ columns, usersData }) => {
       await userApiService.deleteUser({ userUuid: value });
       // eslint-disable-next-line no-alert
       alert('유저가 삭제되었습니다.');
+      navigate(0);
     } catch (error) {
       throw new Error(error);
     }
@@ -53,53 +58,99 @@ const UsersList = ({ columns, usersData }) => {
     processingData();
   }, [processingData]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    pageOptions,
+    canPreviousPage,
+    canNextPage,
+    gotoPage,
+    nextPage,
+    previousPage,
+    pageCount,
+    state: { pageIndex },
+  } = useTable(
     {
       columns,
       data: newData,
       manualSortBy: false,
       disableSortBy: disabledSort,
     },
-    useSortBy
+    useSortBy,
+    usePagination
   );
 
   return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup, index) => (
-          <tr key={index} {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, index) => {
-          prepareRow(row);
-          return (
-            <tr key={index} {...row.getRowProps()}>
-              {row.cells.map((cell, tdIndex) =>
-                cell.value === 'true' ? (
-                  <td key={tdIndex}>Y</td>
-                ) : cell.value === 'false' ? (
-                  <td key={tdIndex}> N </td>
-                ) : (
-                  <td key={tdIndex}>{cell.render('Cell')}</td>
-                )
-              )}
-              <td>
-                <button onClick={deleteUserHandler} type="button" value={row.original.uuid}>
-                  삭제
-                </button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      <Table variant="simple" colorScheme="blue" size="sm" {...getTableProps()}>
+        <Thead>
+          {headerGroups.map((headerGroup, index) => (
+            <Tr key={index} {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <Th textAlign="center" {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                </Th>
+              ))}
+            </Tr>
+          ))}
+        </Thead>
+        <Tbody {...getTableBodyProps()}>
+          {rows.map((row, index) => {
+            prepareRow(row);
+            return (
+              <Tr key={index} {...row.getRowProps()}>
+                {row.cells.map((cell, tdIndex) =>
+                  cell.column.Header === '고객명' ? (
+                    <UpdateUserName key={tdIndex} cell={cell} />
+                  ) : cell.column.Header === '삭제' ? (
+                    <Td key={tdIndex}>
+                      <Button onClick={deleteUserHandler} type="button" value={row.original.uuid}>
+                        삭제
+                      </Button>
+                    </Td>
+                  ) : cell.value === 'true' ? (
+                    <Td textAlign="center" key={tdIndex}>
+                      Y
+                    </Td>
+                  ) : cell.value === 'false' ? (
+                    <Td textAlign="center" key={tdIndex}>
+                      N
+                    </Td>
+                  ) : (
+                    <Td textAlign="center" key={tdIndex}>
+                      {cell.render('Cell')}
+                    </Td>
+                  )
+                )}
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+      <div>
+        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </Button>{' '}
+        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </Button>{' '}
+        <Button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </Button>{' '}
+        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </Button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+      </div>
+    </>
   );
 };
 
