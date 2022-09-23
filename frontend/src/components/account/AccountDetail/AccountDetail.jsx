@@ -44,8 +44,18 @@ const AccountDetail = ({ account }) => {
       </Thead>
       <Tbody>
         <Tr>
-          <Td>{(+account.assets).toLocaleString()}</Td>
-          <Td>{(+account.payments).toLocaleString()}</Td>
+          <Td
+            color={
+              account.assets > account.payments
+                ? 'red'
+                : account.assets === account.payments
+                ? 'black'
+                : 'blue'
+            }
+          >
+            {Math.round(+account.assets).toLocaleString()}
+          </Td>
+          <Td>{Math.round(+account.payments).toLocaleString()}</Td>
           <Td color={account.is_active ? 'blue' : 'red'}>
             {account.is_active ? '활성화' : '비활성화'}
           </Td>
