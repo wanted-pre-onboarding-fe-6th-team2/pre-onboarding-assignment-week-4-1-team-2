@@ -14,7 +14,7 @@ const AccountListBoard = () => {
     limit: new URLSearchParams(search).get('_limit') || 20,
     keyword: new URLSearchParams(search).get('q') || '',
     sort: '',
-    order: 'asc' || 'desc',
+    order: 'asc',
   });
   const { page, limit, sort, order } = currentPage;
   const [word, setWord] = useState('');
@@ -103,7 +103,7 @@ const AccountListBoard = () => {
               </td>
               <td>
                 <Link to={`${account.number}`}>
-                  <AccountNumber accountNumber={account.number} />
+                  <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
                 </Link>
               </td>
               <td>
