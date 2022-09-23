@@ -5,6 +5,7 @@ import UserName from '@/components/account/UserName/UserName';
 import InnerHeading from '@/components/common/InnerHeading/InnerHeading';
 import BrokerName from '@/components/common/BrokerName/BrokerName';
 import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
+import AccountNumber from '@/components/common/AccountNumber/AccountNumber';
 
 const AccountDetail = ({ account }) => {
   return (
@@ -21,7 +22,9 @@ const AccountDetail = ({ account }) => {
         <Tbody>
           <Tr>
             <Td>{account.name}</Td>
-            <Td>{account.number}</Td>
+            <Td>
+              <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
+            </Td>
             <Td>
               <UserName userId={account.user_id} />
             </Td>

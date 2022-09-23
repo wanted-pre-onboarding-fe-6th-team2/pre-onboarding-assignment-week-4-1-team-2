@@ -5,6 +5,7 @@ import accountApiService from '@/api/accountApiService';
 import AccountNameLink from '@/components/user/AccountNameLink/AccountNameLink';
 import BrokerName from '@/components/common/BrokerName/BrokerName';
 import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
+import AccountNumber from '@/components/common/AccountNumber/AccountNumber';
 
 const UserAccounts = ({ userId }) => {
   const [userAccounts, setUserAccounts] = useState([]);
@@ -56,7 +57,9 @@ const UserAccounts = ({ userId }) => {
               <Td>
                 <AccountNameLink name={account.name} id={account.id} />
               </Td>
-              <Td>{account.number}</Td>
+              <Td>
+                <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
+              </Td>
               <Td>{moment(new Date(account.created_at)).format('LL')}</Td>
               <Td>
                 <BrokerName brokerId={account.broker_id} />
