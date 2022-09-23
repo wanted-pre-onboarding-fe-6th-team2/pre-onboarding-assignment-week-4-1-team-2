@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import userApiService from '@/api/userApiService';
 import userSettingApiService from '@/api/userSettingApiService';
 import LoginExtensionBtn from '@/components/common/LoginExtensionBtn';
-import UserDetailTable from '@/components/UserDetail/UserDetail';
+import UserDetailTable from '@/components/user/UserDetail/UserDetail';
 
 const User = () => {
   const { userId } = useParams();
@@ -28,7 +28,6 @@ const User = () => {
   return (
     <div>
       <LoginExtensionBtn />
-      <h1>UserDetail</h1>
       <UserDetailTable user={userInfo} userSetting={userSetting} />
     </div>
   );
