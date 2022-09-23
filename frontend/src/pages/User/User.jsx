@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Container } from '@chakra-ui/react';
 import userApiService from '@/api/userApiService';
 import userSettingApiService from '@/api/userSettingApiService';
-import LoginExtensionBtn from '@/components/common/LoginExtensionBtn';
 import UserDetailTable from '@/components/user/UserDetail/UserDetail';
 
 const User = () => {
@@ -28,7 +27,6 @@ const User = () => {
 
   return (
     <Container maxW="90%">
-      <LoginExtensionBtn />
       <UserDetailTable user={userInfo} userSetting={userSetting} />
     </Container>
   );
