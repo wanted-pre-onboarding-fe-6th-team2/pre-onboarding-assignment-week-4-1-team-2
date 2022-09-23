@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import accountApiService from '@/api/accountApiService';
+import AccountNameLink from '@/components/user/AccountNameLink/AccountNameLink';
 
 const UserAccounts = ({ userId }) => {
   const [userAccounts, setUserAccounts] = useState([]);
@@ -49,7 +50,9 @@ const UserAccounts = ({ userId }) => {
           <Tbody key={account.uuid}>
             <Tr>
               <Td>{index + 1}</Td>
-              <Td>{account.name}</Td>
+              <Td>
+                <AccountNameLink name={account.name} id={account.id} />
+              </Td>
               <Td>{account.number}</Td>
               <Td>{new Date(account.created_at).toLocaleString()}</Td>
               <Td>{account.broker_id}</Td>
