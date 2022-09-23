@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Container } from '@chakra-ui/react';
 import userApiService from '@/api/userApiService';
 import userSettingApiService from '@/api/userSettingApiService';
 import LoginExtensionBtn from '@/components/common/LoginExtensionBtn';
@@ -26,10 +27,10 @@ const User = () => {
   }, [userId]);
 
   return (
-    <div>
+    <Container maxW="90%">
       <LoginExtensionBtn />
       <UserDetailTable user={userInfo} userSetting={userSetting} />
-    </div>
+    </Container>
   );
 };
 

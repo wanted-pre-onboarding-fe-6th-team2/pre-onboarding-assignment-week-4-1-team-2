@@ -31,7 +31,7 @@ const UserAccounts = ({ userId }) => {
   return (
     <div>
       {error && <h1>계좌 정보를 불러올 수 없습니다.</h1>}
-      <Table>
+      <Table size="lg" variant="simple" fontSize="0.9em">
         <Thead>
           <Tr>
             <Th>번호</Th>
@@ -41,6 +41,7 @@ const UserAccounts = ({ userId }) => {
             <Th>계좌명</Th>
             <Th>계좌번호</Th>
             <Th>평가금액</Th>
+            <Th>입금금액</Th>
             <Th>계좌상태</Th>
           </Tr>
         </Thead>
@@ -49,12 +50,24 @@ const UserAccounts = ({ userId }) => {
             <Tr>
               <Td>{index + 1}</Td>
               <Td>{account.broker_id}</Td>
-              <Td>{account.created_at}</Td>
-              <Td>{account.is_active}</Td>
+              <Td>{new Date(account.created_at).toLocaleString()}</Td>
+              <Td color={account.is_active ? 'blue' : 'red'}>
+                {account.is_active ? '활성화' : '비활성화'}
+              </Td>
               <Td>{account.name}</Td>
               <Td>{account.number}</Td>
-              <Td>{account.assets}</Td>
-              <Td>{account.payments}</Td>
+              <Td
+                color={
+                  account.assets > account.payments
+                    ? 'red'
+                    : account.assets === account.payments
+                    ? 'black'
+                    : 'blue'
+                }
+              >
+                {Math.round(+account.assets).toLocaleString()}
+              </Td>
+              <Td>{Math.round(+account.payments).toLocaleString()}</Td>
               <Td>{account.status}</Td>
             </Tr>
           </Tbody>
