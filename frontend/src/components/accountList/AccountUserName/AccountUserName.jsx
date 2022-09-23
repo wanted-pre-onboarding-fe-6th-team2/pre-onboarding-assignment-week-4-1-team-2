@@ -1,20 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import userApiService from '@/api/userApiService';
+import React from 'react';
+import { useAccountUser } from '@/hooks/useAccountUser';
 
 const AccountUserName = ({ userId }) => {
-  const [user, setUser] = useState('');
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userResponse = await userApiService.getUser({ userId });
-        setUser(userResponse);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchUser();
-  }, []);
-  return <span>{user.name}</span>;
+  const userName = useAccountUser(userId);
+  return <span>{userName}</span>;
 };
 export default AccountUserName;

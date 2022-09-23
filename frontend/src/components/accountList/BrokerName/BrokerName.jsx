@@ -1,7 +1,8 @@
 import React from 'react';
-import { brokers } from '@/components/accountList/BrokerName/brokers';
+import { useBrokerName } from '@/hooks/useBrokerName';
 
 const BrokerName = ({ brokerId }) => {
-  return <span>{brokers[brokerId]}</span>;
+  const brokerName = useBrokerName(brokerId);
+  return <span>{brokerName}</span>;
 };
 export default BrokerName;

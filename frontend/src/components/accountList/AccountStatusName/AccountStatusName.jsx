@@ -1,11 +1,8 @@
 import React from 'react';
-import { accountStatus } from '@/components/accountList/AccountStatusName/accountStatus';
+import { useAccountStatus } from '@/hooks/useAccountStatus';
 
 const AccountStatusName = ({ status }) => {
-  const getAccountStatusName = state => {
-    return Object.keys(accountStatus).find(key => accountStatus[key] === state);
-  };
-
-  return <span>{getAccountStatusName(status)}</span>;
+  const accountStatus = useAccountStatus(status);
+  return <span>{accountStatus}</span>;
 };
 export default AccountStatusName;
