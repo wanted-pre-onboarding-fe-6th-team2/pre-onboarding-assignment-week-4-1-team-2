@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Flex, FormControl, Input, Text, Button } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Flex, FormControl, Input, Text, Button, Alert, AlertIcon } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { emailValidator, passwordLengthValidator } from '@/utils/validator';
@@ -13,7 +13,7 @@ const LoginForm = () => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
-  const { isLoading } = useSelector(state => state.auth);
+  const { isLoading, isAuthenticated, error } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,9 +39,11 @@ const LoginForm = () => {
         password: passwordInput,
       })
     );
-
-    navigate(ROUTES.HOME);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) navigate(ROUTES.HOME);
+  }, [isAuthenticated, navigate]);
 
   return (
     <Flex direction="column">
@@ -107,6 +109,12 @@ const LoginForm = () => {
           >
             로그인
           </Button>
+        )}
+        {error && (
+          <Alert status="error" mt="1em" fontSize="sm">
+            <AlertIcon />
+            등록되지 않은 이메일이거나 이메일 또는 비밀번호를 잘못 입력했습니다.
+          </Alert>
         )}
       </FormControl>
     </Flex>
