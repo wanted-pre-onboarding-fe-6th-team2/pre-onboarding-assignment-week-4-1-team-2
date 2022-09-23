@@ -1,7 +1,8 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import UserName from '@/components/account/UserName/UserName';
-import InnerHeading from '../../common/InnerHeading/InnerHeading';
+import InnerHeading from '@/components/common/InnerHeading/InnerHeading';
+import BrokerName from '@/components/common/BrokerName/BrokerName';
 
 const AccountDetail = ({ account }) => {
   return (
@@ -34,7 +35,9 @@ const AccountDetail = ({ account }) => {
         <Tbody>
           <Tr>
             <Td>{account.status}</Td>
-            <Td>{account.broker_id}</Td>
+            <Td>
+              <BrokerName brokerId={account.broker_id} />
+            </Td>
             <Td>{new Date(account.created_at).toLocaleString()}</Td>
           </Tr>
         </Tbody>
