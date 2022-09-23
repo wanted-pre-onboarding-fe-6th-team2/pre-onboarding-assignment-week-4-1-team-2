@@ -3,7 +3,6 @@ import { Td, Button, Input } from '@chakra-ui/react';
 import userApiService from '@/api/userApiService';
 
 const UpdateUserName = ({ cell, tdIndex }) => {
-  // console.log(cell.row.original.id);
   const [userName, setUserName] = useState(cell.value);
   const [isEditMode, setIsEditMode] = useState(false);
   const createUserInputHandler = () => {
@@ -20,6 +19,11 @@ const UpdateUserName = ({ cell, tdIndex }) => {
       throw new Error(error);
     }
   };
+  const regexName = /\b(\w{1,2})(\w{2,}?)(\w?)\b/g;
+  const maskingName = userName.replace(
+    regexName,
+    (_, first, middle, last) => `${first}${'*'.repeat(middle.length)}${last}`
+  );
 
   return (
     <Td textAlign="center" key={tdIndex}>
@@ -31,7 +35,7 @@ const UpdateUserName = ({ cell, tdIndex }) => {
         </>
       ) : (
         <>
-          {userName}
+          {maskingName}
           <br />
           <Button onClick={createUserInputHandler}>수정</Button>
         </>
