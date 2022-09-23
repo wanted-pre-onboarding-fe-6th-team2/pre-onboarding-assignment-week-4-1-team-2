@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Input, Box, Button } from '@chakra-ui/react';
 import UsersListBoard from '@/components/UsersListBoard/UsersListBoard';
 import userApiService from '@/api/userApiService';
 import UserForm from '@/components/UsersListBoard/UserForm';
@@ -7,6 +8,7 @@ import UserForm from '@/components/UsersListBoard/UserForm';
 const Users = () => {
   const { search } = useLocation();
   const navigate = useNavigate();
+  const [pageError, setPageError] = useState(false);
   const [currentPage, setCurrentPage] = useState({
     page: new URLSearchParams(search).get('_page') || 1,
     limit: new URLSearchParams(search).get('_limit') || 20,
@@ -14,19 +16,19 @@ const Users = () => {
     sort: '',
     order: 'asc' || 'desc',
   });
-
-  const [pageError, setPageError] = useState(false);
   const { page, limit } = currentPage;
-  const [word, setWord] = useState('');
+  const [searchedWord, setSearchedWord] = useState('');
   const [usersData, setUsersData] = useState([]);
   const handleSearch = () => {
-    setCurrentPage(prev => ({ ...prev, keyword: word }));
-    navigate(`?_page=${page}&_limit=${limit}&q=${word}`);
+    setCurrentPage(prev => ({ ...prev, keyword: searchedWord }));
+    navigate(`?_page=${page}&_limit=${limit}&q=${searchedWord}`);
   };
   const handleChangeKeyword = e => {
     const { value } = e.target;
-    setWord(value);
+    setSearchedWord(value);
   };
+
+  // 유저 리스트 테이블의 헤더를 결정합니다.
   const columns = useMemo(
     () => [
       {
@@ -79,10 +81,16 @@ const Users = () => {
         Header: '가입일',
         disableSortBy: true,
       },
+      {
+        accessor: 'delete_btn',
+        Header: '삭제',
+        disableSortBy: true,
+      },
     ],
     []
   );
 
+  // 현재 페이지의 유저 리스트를 가져옵니다.
   useEffect(() => {
     try {
       const getUsersData = async () => {
@@ -100,12 +108,12 @@ const Users = () => {
 
   return (
     <>
-      <div>
-        <input name="search" value={word} onChange={handleChangeKeyword} />
-        <button type="button" onClick={handleSearch}>
+      <Box>
+        <Input name="search" value={searchedWord} onChange={handleChangeKeyword} />
+        <Button type="button" onClick={handleSearch}>
           검색
-        </button>
-      </div>
+        </Button>
+      </Box>
       <UsersListBoard columns={columns} usersData={usersData} />
       <UserForm />
     </>
