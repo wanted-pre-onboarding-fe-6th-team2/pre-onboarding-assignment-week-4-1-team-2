@@ -17,7 +17,7 @@ const Sidebar = ({ collapsed }) => {
   return (
     <SidebarContainer color="white" minW={`${220 - 130 * collapsed}`} bg="blue.300" area="nav">
       <Title w="100%">
-        <SunIcon w={6} h={6} />{' '}
+        <SunIcon w={6} h={6} />
         {!collapsed && (
           <Heading ml="4" as="h3" size="lg">
             PREFACE
