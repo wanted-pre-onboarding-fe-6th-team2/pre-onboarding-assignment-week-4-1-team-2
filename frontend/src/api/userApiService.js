@@ -10,8 +10,21 @@ const userApiService = {
     return filteredUsers.length;
   },
 
-  getUsers: async ({ page, limit } = { page: 1, limit: 20 }) =>
-    http.get({ url: `/users?_page=${page}&_limit=${limit}` }),
+  getUsers: async (
+    { page, limit, keyword, order, sort, queryString } = {
+      page: 1,
+      limit: 20,
+      keyword: '',
+      sort: '',
+      order: 'asc',
+      queryString: '',
+    }
+  ) =>
+    http.get({
+      url: `/users?_page=${page}&_limit=${limit}${
+        keyword ? `&q=${keyword}` : ''
+      }&_sort=${sort}&_order=${order}&${queryString}`,
+    }),
 
   getUser: ({ userId }) => http.get({ url: `/users/${userId}` }),
 
