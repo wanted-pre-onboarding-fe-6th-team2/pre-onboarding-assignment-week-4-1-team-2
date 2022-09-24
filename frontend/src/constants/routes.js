@@ -5,4 +5,5 @@ export const ROUTES = {
   USER: '/user',
   ACCOUNT: '/account',
   USERSLIST: '/users',
+  LOGOUT: '/logout',
 };
