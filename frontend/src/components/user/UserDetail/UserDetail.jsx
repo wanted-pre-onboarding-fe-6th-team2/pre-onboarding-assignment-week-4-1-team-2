@@ -34,7 +34,7 @@ const UserDetail = ({ user, userSetting }) => {
           <Tr>
             <Td>{`${user.address} ${user.detail_address}`}</Td>
             <Td>{user.email}</Td>
-            <Td>{user.phone_number}</Td>
+            <Td>{user.phone_number?.replace(/-[0-9]{4}-/g, '-****-')}</Td>
           </Tr>
         </Tbody>
         <Thead>
