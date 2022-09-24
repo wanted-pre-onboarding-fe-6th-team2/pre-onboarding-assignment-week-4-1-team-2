@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Td, Button, Container, Flex } from '@chakra-ui/react';
 import accountApiService from '@/api/accountApiService';
 import AccountUserName from '@/components/accountList/AccountUserName/AccountUserName';
 import { ROUTES } from '@/constants/routes';
@@ -14,6 +14,7 @@ const AccountListBoard = () => {
     sort: '',
     order: 'asc',
   });
+
   const [accountList, setAccountList] = useState([]);
   const [error, setError] = useState(false);
 
@@ -46,19 +47,37 @@ const AccountListBoard = () => {
 
   return (
     <>
-      <Search currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Container maxW="100%">
+        <Flex m="30px 0 10px 0">
+          <Flex gap={3}>
+            <Search currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          </Flex>
+        </Flex>
+      </Container>
       <Table style={{ textAlign: 'center' }}>
         <Thead>
           <Tr>
             <Th>고객명</Th>
             <Th>
-              <Button type="Button" onClick={handleFilter} name="broker_id">
+              <Button
+                type="Button"
+                onClick={handleFilter}
+                name="broker_id"
+                variant="ghost"
+                fontSize="xs"
+              >
                 브로커명
               </Button>
             </Th>
             <Th>계좌번호</Th>
             <Th onClick={handleFilter}>
-              <Button type="Button" onClick={handleFilter} name="status">
+              <Button
+                type="Button"
+                onClick={handleFilter}
+                name="status"
+                variant="ghost"
+                fontSize="xs"
+              >
                 계좌상태
               </Button>
             </Th>
@@ -66,7 +85,13 @@ const AccountListBoard = () => {
             <Th>평가금액</Th>
             <Th>입금금액</Th>
             <Th onClick={handleFilter}>
-              <Button type="Button" onClick={handleFilter} name="is_active">
+              <Button
+                type="Button"
+                onClick={handleFilter}
+                name="is_active"
+                variant="ghost"
+                fontSize="xs"
+              >
                 계좌활성화여부
               </Button>
             </Th>
