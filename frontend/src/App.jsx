@@ -8,6 +8,7 @@ import AccountList from '@/pages/AccountList/AccountList';
 import Login from '@/pages/Login/Login';
 import Account from '@/pages/Account/Account';
 import User from '@/pages/User/User';
+import Logout from './pages/Logout/Logout';
 
 const App = () => (
   <ChakraProvider>
@@ -18,6 +19,7 @@ const App = () => (
       <Route path={ROUTES.ACOOUNTS} element={<AccountList />} />
       <Route path={`${ROUTES.ACCOUNT}/:accountId`} element={<Account />} />
       <Route path={`${ROUTES.USER}/:userId`} element={<User />} />
+      <Route path={ROUTES.LOGOUT} element={<Logout />} />
     </Routes>
   </ChakraProvider>
 );
