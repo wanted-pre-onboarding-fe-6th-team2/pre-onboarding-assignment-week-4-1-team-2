@@ -25,8 +25,6 @@ const AccountListBoard = () => {
   });
   const { sort, keyword } = currentPage;
 
-  console.log(totalUsers);
-
   const getTotal = async () => {
     const newTotalUsers = await accountApiService.getAccountsCount({ keyword });
     setTotalUsers(newTotalUsers);
