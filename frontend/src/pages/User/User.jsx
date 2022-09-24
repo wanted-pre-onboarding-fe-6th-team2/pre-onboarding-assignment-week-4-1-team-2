@@ -4,6 +4,7 @@ import { Container } from '@chakra-ui/react';
 import userApiService from '@/api/userApiService';
 import userSettingApiService from '@/api/userSettingApiService';
 import UserDetailTable from '@/components/user/UserDetail/UserDetail';
+import Layout from '@/components/common/Layout/Layout';
 
 const User = () => {
   const { userId } = useParams();
@@ -26,9 +27,11 @@ const User = () => {
   }, [userId]);
 
   return (
-    <Container maxW="90%">
-      <UserDetailTable user={userInfo} userSetting={userSetting} />
-    </Container>
+    <Layout>
+      <Container maxW="90%">
+        <UserDetailTable user={userInfo} userSetting={userSetting} />
+      </Container>
+    </Layout>
   );
 };
 
