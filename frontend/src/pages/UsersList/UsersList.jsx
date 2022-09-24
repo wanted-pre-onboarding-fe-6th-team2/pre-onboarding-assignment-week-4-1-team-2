@@ -4,12 +4,30 @@ import UsersListBoard from '@/components/UsersListBoard/UsersListBoard';
 import userApiService from '@/api/userApiService';
 import Search from '@/components/Search/Search';
 import UserForm from '@/components/UsersListBoard/UserForm';
+import Pagination from '@/components/common/Pagination/Pagination';
+import usePagination from '@/hooks/usePagination';
+import Layout from '@/components/common/Layout/Layout';
 
 const Users = () => {
-  const [currentPage, setCurrentPage] = useState();
+  const [totalUsers, setTotalUsers] = useState(0);
+  const { data, parms, totalPages } = usePagination(totalUsers, userApiService.getUsers);
+  const usersData = data;
+
+  const [currentPage, setCurrentPage] = useState({
+    ...parms,
+  });
+  const { keyword } = currentPage;
 
   const [pageError, setPageError] = useState(false);
-  const [usersData, setUsersData] = useState([]);
+
+  const getTotal = async () => {
+    const newTotalUsers = await userApiService.getUsersTotalCount({ keyword });
+    setTotalUsers(newTotalUsers);
+  };
+  console.log(totalUsers);
+  useEffect(() => {
+    getTotal();
+  }, [currentPage]);
 
   // 유저 리스트 테이블의 헤더를 결정합니다.
   const columns = useMemo(
@@ -73,24 +91,11 @@ const Users = () => {
     []
   );
 
-  // 현재 페이지의 유저 리스트를 가져옵니다.
-  useEffect(() => {
-    try {
-      const getUsersData = async () => {
-        const usersDataresult = await userApiService.getUsers(currentPage);
-        setUsersData(usersDataresult);
-      };
-      getUsersData();
-    } catch (error) {
-      setPageError(true);
-      throw new Error(error);
-    }
-  }, [currentPage, setCurrentPage]);
-
+  if (!data) return setPageError(true);
   if (pageError) return <div>Error... </div>;
 
   return (
-    <>
+    <Layout>
       <Container maxW="100%">
         <Flex justifyContent="space-between" alignItems="center" m="30px 0 10px 0">
           <Flex gap={3}>
@@ -101,7 +106,10 @@ const Users = () => {
       </Container>
 
       <UsersListBoard columns={columns} usersData={usersData} />
-    </>
+      <Flex m="30px 0 10px 0" justifyContent="center">
+        <Pagination totalPages={totalPages} parms={currentPage} setCurrentPage={setCurrentPage} />
+      </Flex>
+    </Layout>
   );
 };
 

@@ -7,8 +7,8 @@ const usePagination = (dataLength, apiCall, volume = 20) => {
   const parms = {
     page: +searchParams.get('_page') || 1,
     limit: +searchParams.get('_limit') || 20,
-    keyword: searchParams.get('_q') || '',
-    sort: searchParams.get('_sort') || 'id',
+    keyword: searchParams.get('q') || '',
+    sort: searchParams.get('_sort') || '',
     order: searchParams.get('_order') || 'asc',
   };
 

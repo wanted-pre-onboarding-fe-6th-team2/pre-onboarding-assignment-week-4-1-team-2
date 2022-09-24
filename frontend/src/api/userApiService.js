@@ -9,7 +9,10 @@ const userApiService = {
 
     return filteredUsers.length;
   },
-
+  getUsersTotalCount: async ({ keyword }) => {
+    const usersResponse = await http.get({ url: `/users?q=${keyword}` });
+    return usersResponse.length;
+  },
   getUsers: async (
     { page, limit, keyword, order, sort, queryString } = {
       page: 1,
