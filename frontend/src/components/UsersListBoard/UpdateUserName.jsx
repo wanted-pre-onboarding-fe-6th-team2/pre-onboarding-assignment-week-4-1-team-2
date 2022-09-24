@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Td, Button, Input } from '@chakra-ui/react';
+import { Td, Button, Input, Flex } from '@chakra-ui/react';
 import userApiService from '@/api/userApiService';
 
 const UpdateUserName = ({ cell, tdIndex }) => {
@@ -28,17 +28,21 @@ const UpdateUserName = ({ cell, tdIndex }) => {
   return (
     <Td textAlign="center" key={tdIndex}>
       {isEditMode ? (
-        <>
+        <Flex gap={2} justifyContent="center" alignItems="center">
           <Input onChange={e => setUserName(e.target.value)} type="text" value={userName} />
           <br />
-          <Button onClick={userNameChangeHandler}>완료</Button>
-        </>
+          <Button colorScheme="yellow" size="xs" onClick={userNameChangeHandler}>
+            완료
+          </Button>
+        </Flex>
       ) : (
-        <>
+        <Flex gap={2} justifyContent="center" alignItems="center">
           {maskingName}
           <br />
-          <Button onClick={createUserInputHandler}>수정</Button>
-        </>
+          <Button size="xs" onClick={createUserInputHandler}>
+            수정
+          </Button>
+        </Flex>
       )}
     </Td>
   );

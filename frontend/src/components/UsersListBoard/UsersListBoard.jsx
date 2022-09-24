@@ -85,7 +85,7 @@ const UsersList = ({ columns, usersData }) => {
 
   return (
     <>
-      <Table variant="simple" colorScheme="blue" size="sm" {...getTableProps()}>
+      <Table size="sm" {...getTableProps()}>
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr key={index} {...headerGroup.getHeaderGroupProps()}>
@@ -106,8 +106,15 @@ const UsersList = ({ columns, usersData }) => {
                   cell.column.Header === '고객명' ? (
                     <UpdateUserName key={tdIndex} cell={cell} />
                   ) : cell.column.Header === '삭제' ? (
-                    <Td key={tdIndex}>
-                      <Button onClick={deleteUserHandler} type="button" value={row.original.uuid}>
+                    <Td textAlign="center" key={tdIndex}>
+                      <Button
+                        size="xs"
+                        colorScheme="red"
+                        variant="solid"
+                        onClick={deleteUserHandler}
+                        type="button"
+                        value={row.original.uuid}
+                      >
                         삭제
                       </Button>
                     </Td>

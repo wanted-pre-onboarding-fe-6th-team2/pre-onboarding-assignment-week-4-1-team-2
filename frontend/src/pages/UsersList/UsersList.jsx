@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Input, Box, Button } from '@chakra-ui/react';
+import { Container, Input, Flex, Button } from '@chakra-ui/react';
 import UsersListBoard from '@/components/UsersListBoard/UsersListBoard';
 import userApiService from '@/api/userApiService';
 import UserForm from '@/components/UsersListBoard/UserForm';
@@ -108,14 +108,18 @@ const Users = () => {
 
   return (
     <>
-      <Box>
-        <Input name="search" value={searchedWord} onChange={handleChangeKeyword} />
-        <Button type="button" onClick={handleSearch}>
-          검색
-        </Button>
-      </Box>
+      <Container maxW="100%">
+        <Flex justifyContent="space-between" alignItems="center" m="30px 0 10px 0">
+          <Flex gap={3}>
+            <Input name="search" value={searchedWord} onChange={handleChangeKeyword} />
+            <Button type="button" variant="solid" onClick={handleSearch}>
+              검색
+            </Button>
+          </Flex>
+          <UserForm />
+        </Flex>
+      </Container>
       <UsersListBoard columns={columns} usersData={usersData} />
-      <UserForm />
     </>
   );
 };
