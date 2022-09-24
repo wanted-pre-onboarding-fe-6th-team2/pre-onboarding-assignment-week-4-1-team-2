@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Table, Thead, Tbody, Tr, Th, Td, Button, Input, Flex, Container } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
 import accountApiService from '@/api/accountApiService';
 import AccountUserName from '@/components/accountList/AccountUserName/AccountUserName';
-import BrokerName from '@/components/accountList/BrokerName/BrokerName';
-import AccountStatusName from '@/components/accountList/AccountStatusName/AccountStatusName';
-import AccountNumber from '@/components/accountList/AccountNumber/AccountNumber';
+import { ROUTES } from '@/constants/routes';
+import BrokerName from '@/components/common/BrokerName/BrokerName';
+import AccountNumber from '@/components/common/AccountNumber/AccountNumber';
+import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
+import Search from '@/components/Search/Search';
 
 const AccountListBoard = () => {
-  const { search } = useLocation();
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState({
-    page: new URLSearchParams(search).get('_page') || 1,
-    limit: new URLSearchParams(search).get('_limit') || 20,
-    keyword: new URLSearchParams(search).get('q') || '',
     sort: '',
     order: 'asc',
   });
-  const { page, limit, sort, order } = currentPage;
-  const [word, setWord] = useState('');
-
   const [accountList, setAccountList] = useState([]);
   const [error, setError] = useState(false);
+
+  const { sort, order } = currentPage;
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -37,15 +33,6 @@ const AccountListBoard = () => {
     fetchAccounts();
   }, [currentPage, setCurrentPage]);
 
-  const handleSearch = () => {
-    setCurrentPage(prev => ({ ...prev, keyword: word }));
-    navigate(`?_page=${page}&_limit=${limit}&q=${word}`);
-  };
-  const handleChangeKeyword = e => {
-    const { value } = e.target;
-    setWord(value);
-  };
-
   const handleFilter = e => {
     const { name } = e.target;
     if (sort === name) {
@@ -59,14 +46,7 @@ const AccountListBoard = () => {
 
   return (
     <>
-      <Container maxW="md">
-        <Flex>
-          <Input name="search" value={word} onChange={handleChangeKeyword} />
-          <Button type="Button" onClick={handleSearch}>
-            검색
-          </Button>
-        </Flex>
-      </Container>
+      <Search currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <Table style={{ textAlign: 'center' }}>
         <Thead>
           <Tr>
@@ -97,7 +77,7 @@ const AccountListBoard = () => {
           {accountList.map(account => (
             <Tr key={account.uuid}>
               <Td>
-                <Link to={`${account.user_id}`}>
+                <Link to={`${ROUTES.USER}/${account.user_id}`}>
                   <AccountUserName userId={account.user_id} />
                 </Link>
               </Td>
@@ -105,12 +85,12 @@ const AccountListBoard = () => {
                 <BrokerName brokerId={account.broker_id} />
               </Td>
               <Td>
-                <Link to={`${account.number}`}>
+                <Link to={`${ROUTES.ACCOUNT}/${account.user_id}`}>
                   <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
                 </Link>
               </Td>
               <Td>
-                <AccountStatusName status={account.status} />
+                <AccountStatus status={account.status} />
               </Td>
               <Td>{account.name}</Td>
               <Td
@@ -134,4 +114,5 @@ const AccountListBoard = () => {
     </>
   );
 };
+
 export default AccountListBoard;

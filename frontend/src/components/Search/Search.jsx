@@ -1,31 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Button, Input, Flex, Container } from '@chakra-ui/react';
 
-const Search = () => {
+const Search = ({ currentPage, setCurrentPage }) => {
   const { search } = useLocation();
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState({
-    page: new URLSearchParams(search).get('_page') || 1,
-    limit: new URLSearchParams(search).get('_limit') || 20,
-    keyword: new URLSearchParams(search).get('q') || '',
-  });
-  const { page, limit, keyword } = currentPage;
-
+  const { page, limit } = currentPage;
+  const [word, setWord] = useState('');
+  useEffect(() => {
+    setCurrentPage(prev => ({
+      ...prev,
+      page: new URLSearchParams(search).get('_page') || 1,
+      limit: new URLSearchParams(search).get('_limit') || 20,
+      keyword: new URLSearchParams(search).get('q') || '',
+    }));
+  }, []);
   const handleSearch = () => {
-    navigate(`?_page=${page}&_limit=${limit}&q=${keyword}`);
+    setCurrentPage(prev => ({ ...prev, keyword: word }));
+    navigate(`?_page=${page}&_limit=${limit}&q=${word}`);
   };
   const handleChangeKeyword = e => {
     const { value } = e.target;
-    setCurrentPage(prev => ({ ...prev, keyword: value }));
+    setWord(value);
   };
 
   return (
-    <div>
-      <input name="search" value={keyword} onChange={handleChangeKeyword} />
-      <button type="button" onClick={handleSearch}>
-        검색
-      </button>
-    </div>
+    <Container maxW="md">
+      <Flex>
+        <Input name="search" value={word} onChange={handleChangeKeyword} />
+        <Button type="Button" onClick={handleSearch}>
+          검색
+        </Button>
+      </Flex>
+    </Container>
   );
 };
 
