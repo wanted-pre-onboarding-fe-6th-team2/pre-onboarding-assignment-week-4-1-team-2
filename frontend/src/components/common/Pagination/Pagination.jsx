@@ -4,10 +4,13 @@ import { ChevronLeftIcon, ChevronRightIcon, ArrowLeftIcon, ArrowRightIcon } from
 import { useNavigate } from 'react-router-dom';
 import { PageButton } from './Pagination.styled';
 
+const FIRST_PAGE = 1;
+const PAGE_MAX = 5;
+
 const Pagination = ({ totalPages, parms, setCurrentPage }) => {
   const navigator = useNavigate();
   const { page, limit, keyword, sort, order } = parms;
-  const pages = Array(totalPages < 5 ? totalPages : 5);
+  const pages = Array(totalPages < PAGE_MAX ? totalPages : PAGE_MAX);
   const [start, setStart] = useState(page > 5 ? page - 4 : page);
 
   const setPageUrl = nextPage => {
@@ -16,8 +19,8 @@ const Pagination = ({ totalPages, parms, setCurrentPage }) => {
   };
 
   const moveFirstPage = () => {
-    setPageUrl(1);
-    setStart(1);
+    setPageUrl(FIRST_PAGE);
+    setStart(FIRST_PAGE);
   };
 
   const moveEndPage = () => {
@@ -26,9 +29,9 @@ const Pagination = ({ totalPages, parms, setCurrentPage }) => {
   };
 
   const prevPage = () => {
-    if (page - 1 < 1) return;
-    if (page === start && page !== 1) {
-      if (page - 3 <= 1) setStart(prev => prev - 1);
+    if (page - 1 < FIRST_PAGE) return;
+    if (page === start && page !== FIRST_PAGE) {
+      if (page - 3 <= FIRST_PAGE) setStart(prev => prev - 1);
       else setStart(prev => prev - 3);
     }
     setPageUrl(page - 1);
@@ -45,7 +48,7 @@ const Pagination = ({ totalPages, parms, setCurrentPage }) => {
 
   return (
     <Flex>
-      {totalPages > 5 && (
+      {totalPages > PAGE_MAX && (
         <IconButton onClick={moveFirstPage} icon={<ArrowLeftIcon h={3} w={3} />} />
       )}
       <IconButton onClick={prevPage} icon={<ChevronLeftIcon h={6} w={6} />} />
@@ -63,7 +66,9 @@ const Pagination = ({ totalPages, parms, setCurrentPage }) => {
         </PageButton>
       ))}
       <IconButton onClick={nextPage} icon={<ChevronRightIcon h={6} w={6} />} />
-      {totalPages > 5 && <IconButton onClick={moveEndPage} icon={<ArrowRightIcon h={3} w={3} />} />}
+      {totalPages > PAGE_MAX && (
+        <IconButton onClick={moveEndPage} icon={<ArrowRightIcon h={3} w={3} />} />
+      )}
     </Flex>
   );
 };

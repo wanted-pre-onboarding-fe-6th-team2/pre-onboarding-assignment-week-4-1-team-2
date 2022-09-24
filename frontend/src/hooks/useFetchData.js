@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const usePagination = (dataLength, apiCall, volume = 20) => {
+const useFetchData = apiCall => {
+  const [data, setData] = useState([]);
+
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const parms = {
@@ -14,9 +16,6 @@ const usePagination = (dataLength, apiCall, volume = 20) => {
 
   const { page, limit, keyword, sort, order } = parms;
 
-  const [data, setData] = useState([]);
-  const totalPages = useMemo(() => Math.floor(dataLength / volume), [volume, dataLength]);
-
   const fetchData = useCallback(async () => {
     const newData = await apiCall({ page, limit, keyword, sort, order });
     setData(newData);
@@ -26,7 +25,7 @@ const usePagination = (dataLength, apiCall, volume = 20) => {
     fetchData();
   }, [fetchData]);
 
-  return { data, parms, totalPages };
+  return { data, parms };
 };
 
-export default usePagination;
+export default useFetchData;
