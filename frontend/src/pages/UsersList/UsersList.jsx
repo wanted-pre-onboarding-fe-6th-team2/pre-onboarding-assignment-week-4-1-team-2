@@ -5,24 +5,25 @@ import userApiService from '@/api/userApiService';
 import Search from '@/components/Search/Search';
 import UserForm from '@/components/UsersListBoard/UserForm';
 import Pagination from '@/components/common/Pagination/Pagination';
-import usePagination from '@/hooks/usePagination';
+import useFetchData from '@/hooks/useFetchData';
 import Layout from '@/components/common/Layout/Layout';
 
 const Users = () => {
-  const [totalUsers, setTotalUsers] = useState(0);
-  const { data, parms, totalPages } = usePagination(totalUsers, userApiService.getUsers);
+  const [totalPages, setTotalPages] = useState(0);
+  const { data, parms } = useFetchData(userApiService.getUsers);
   const usersData = data;
 
   const [currentPage, setCurrentPage] = useState({
     ...parms,
   });
-  const { keyword } = currentPage;
+  const { keyword, limit } = currentPage;
 
   const [pageError, setPageError] = useState(false);
 
   const getTotal = async () => {
-    const newTotalUsers = await userApiService.getUsersTotalCount({ keyword });
-    setTotalUsers(newTotalUsers);
+    const getUsersTotalCount = await userApiService.getUsersTotalCount({ keyword });
+    const userTotal = Math.ceil(getUsersTotalCount / limit);
+    setTotalPages(userTotal);
   };
   useEffect(() => {
     getTotal();

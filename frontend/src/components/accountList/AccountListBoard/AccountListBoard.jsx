@@ -9,25 +9,26 @@ import AccountNumber from '@/components/common/AccountNumber/AccountNumber';
 import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
 import Search from '@/components/Search/Search';
 import Pagination from '@/components/common/Pagination/Pagination';
-import usePagination from '@/hooks/usePagination';
+import useFetchData from '@/hooks/useFetchData';
 
 const AccountListBoard = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
 
-  const [totalUsers, setTotalUsers] = useState(0);
-  const { data, parms, totalPages } = usePagination(totalUsers, accountApiService.getAccounts);
+  const [totalPages, setTotalPages] = useState(0);
+  const { data, parms } = useFetchData(accountApiService.getAccounts);
   const [pageError, setPageError] = useState(false);
   const accountsList = data;
   const [currentPage, setCurrentPage] = useState({
     ...parms,
   });
-  const { sort, keyword } = currentPage;
+  const { sort, keyword, limit } = currentPage;
 
   const getTotal = async () => {
-    const newTotalUsers = await accountApiService.getAccountsCount({ keyword });
-    setTotalUsers(newTotalUsers);
+    const getAccountsCount = await accountApiService.getAccountsCount({ keyword });
+    const acountTotal = Math.ceil(getAccountsCount / limit);
+    setTotalPages(acountTotal);
   };
   useEffect(() => {
     getTotal();
