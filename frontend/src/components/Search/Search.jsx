@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Input, Flex, Container } from '@chakra-ui/react';
+import { Button, Input } from '@chakra-ui/react';
 
 const Search = ({ currentPage, setCurrentPage }) => {
   const { search } = useLocation();
   const navigate = useNavigate();
-  const { page, limit } = currentPage;
   const [word, setWord] = useState('');
   useEffect(() => {
     setCurrentPage(prev => ({
@@ -16,6 +15,7 @@ const Search = ({ currentPage, setCurrentPage }) => {
     }));
   }, []);
   const handleSearch = () => {
+    const { page, limit } = currentPage;
     setCurrentPage(prev => ({ ...prev, keyword: word }));
     navigate(`?_page=${page}&_limit=${limit}&q=${word}`);
   };
@@ -25,14 +25,12 @@ const Search = ({ currentPage, setCurrentPage }) => {
   };
 
   return (
-    <Container maxW="md">
-      <Flex>
-        <Input name="search" value={word} onChange={handleChangeKeyword} />
-        <Button type="Button" onClick={handleSearch}>
-          검색
-        </Button>
-      </Flex>
-    </Container>
+    <>
+      <Input name="search" value={word} onChange={handleChangeKeyword} />
+      <Button type="Button" onClick={handleSearch}>
+        검색
+      </Button>
+    </>
   );
 };
 

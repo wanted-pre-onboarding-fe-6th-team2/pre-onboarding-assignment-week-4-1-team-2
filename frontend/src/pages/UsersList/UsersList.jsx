@@ -1,32 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Container, Input, Flex, Button } from '@chakra-ui/react';
+import { Container, Flex } from '@chakra-ui/react';
 import UsersListBoard from '@/components/UsersListBoard/UsersListBoard';
 import userApiService from '@/api/userApiService';
+import Search from '@/components/Search/Search';
 import UserForm from '@/components/UsersListBoard/UserForm';
 
 const Users = () => {
-  const { search } = useLocation();
-  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState();
+
   const [pageError, setPageError] = useState(false);
-  const [currentPage, setCurrentPage] = useState({
-    page: new URLSearchParams(search).get('_page') || 1,
-    limit: new URLSearchParams(search).get('_limit') || 20,
-    keyword: new URLSearchParams(search).get('q') || '',
-    sort: '',
-    order: 'asc' || 'desc',
-  });
-  const { page, limit } = currentPage;
-  const [searchedWord, setSearchedWord] = useState('');
   const [usersData, setUsersData] = useState([]);
-  const handleSearch = () => {
-    setCurrentPage(prev => ({ ...prev, keyword: searchedWord }));
-    navigate(`?_page=${page}&_limit=${limit}&q=${searchedWord}`);
-  };
-  const handleChangeKeyword = e => {
-    const { value } = e.target;
-    setSearchedWord(value);
-  };
 
   // 유저 리스트 테이블의 헤더를 결정합니다.
   const columns = useMemo(
@@ -111,14 +94,12 @@ const Users = () => {
       <Container maxW="100%">
         <Flex justifyContent="space-between" alignItems="center" m="30px 0 10px 0">
           <Flex gap={3}>
-            <Input name="search" value={searchedWord} onChange={handleChangeKeyword} />
-            <Button type="button" variant="solid" onClick={handleSearch}>
-              검색
-            </Button>
+            <Search currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </Flex>
           <UserForm />
         </Flex>
       </Container>
+
       <UsersListBoard columns={columns} usersData={usersData} />
     </>
   );
