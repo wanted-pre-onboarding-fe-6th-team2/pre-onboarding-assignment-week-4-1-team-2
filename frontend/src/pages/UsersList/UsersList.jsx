@@ -24,7 +24,6 @@ const Users = () => {
     const newTotalUsers = await userApiService.getUsersTotalCount({ keyword });
     setTotalUsers(newTotalUsers);
   };
-  console.log(totalUsers);
   useEffect(() => {
     getTotal();
   }, [currentPage]);
