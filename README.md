@@ -166,9 +166,16 @@ yarn workspace frontend dev
 
 - **해결방법**
 
+- chakra-ui를 통한 공통 Layout 구현 
+- sidebar를 통한 URL 이동 및 로그아웃 구현
+- 접기버튼을 통해 sidebar를 접고 펼 수 있는 기능 구현
+- redux auth state를 통한 유저 이름 출력
+- Pagination 컴포넌트 구현
+- url Parameters를 통해 데이터를 호출하는 useFetchData 구현
+
 - **트러블 슈팅**
 
--
+- sidebar의 크기조정 시 width값이 화면 크기에따라 변환되어 minWidth를 통한 크기 고정
 
 ### API 호출 및 Redux 연결
 
