@@ -26,11 +26,6 @@ wldbszpflrxj">변지윤</a></td>
 - ### 계좌 목록
 - <video src='https://user-images.githubusercontent.com/72956443/192097614-09051b5d-1d1c-49c9-9e6f-0d955d167ae1.mp4' width=100% />
 
-> ## 테스트 계정
-
-- email: pre-onboarding-team2@wanted.com
-- password: qwer1234
-
 > ## 실행 방법
 
 ```sh
@@ -40,7 +35,15 @@ yarn workspace backend start
 
 # 새로운 터미널에서
 yarn workspace frontend dev
+
 ```
+
+#### 이후 브라우저에서 `http://localhost:5173/`로 접속하면 실행할 수 있습니다.
+
+> ## 테스트 계정
+
+- email: pre-onboarding-team2@wanted.com
+- password: qwer1234
 
 > ## 목차
 
