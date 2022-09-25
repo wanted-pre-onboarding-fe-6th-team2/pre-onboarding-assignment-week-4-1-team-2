@@ -1,31 +1,27 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button, Input } from '@chakra-ui/react';
 
-const Search = () => {
-  const { search } = useLocation();
+const Search = ({ currentPage, setCurrentPage }) => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState({
-    page: new URLSearchParams(search).get('_page') || 1,
-    limit: new URLSearchParams(search).get('_limit') || 20,
-    keyword: new URLSearchParams(search).get('q') || '',
-  });
-  const { page, limit, keyword } = currentPage;
+  const [word, setWord] = useState('');
 
   const handleSearch = () => {
-    navigate(`?_page=${page}&_limit=${limit}&q=${keyword}`);
+    const { limit } = currentPage;
+    setCurrentPage(prev => ({ ...prev, keyword: word }));
+    navigate(`?_page=1&_limit=${limit}&q=${word}`);
   };
   const handleChangeKeyword = e => {
     const { value } = e.target;
-    setCurrentPage(prev => ({ ...prev, keyword: value }));
+    setWord(value);
   };
-
   return (
-    <div>
-      <input name="search" value={keyword} onChange={handleChangeKeyword} />
-      <button type="button" onClick={handleSearch}>
+    <>
+      <Input name="search" value={word} onChange={handleChangeKeyword} />
+      <Button type="Button" colorScheme="blue" onClick={handleSearch}>
         검색
-      </button>
-    </div>
+      </Button>
+    </>
   );
 };
 

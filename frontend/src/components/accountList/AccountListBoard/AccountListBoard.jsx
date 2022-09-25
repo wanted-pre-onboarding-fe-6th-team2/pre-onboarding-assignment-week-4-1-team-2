@@ -1,84 +1,92 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Table, Thead, Tbody, Tr, Th, Td, Button, Input, Flex, Container } from '@chakra-ui/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Table, Thead, Tbody, Tr, Th, Td, Button, Container, Flex } from '@chakra-ui/react';
 import accountApiService from '@/api/accountApiService';
 import AccountUserName from '@/components/accountList/AccountUserName/AccountUserName';
-import BrokerName from '@/components/accountList/BrokerName/BrokerName';
-import AccountStatusName from '@/components/accountList/AccountStatusName/AccountStatusName';
-import AccountNumber from '@/components/accountList/AccountNumber/AccountNumber';
+import { ROUTES } from '@/constants/routes';
+import BrokerName from '@/components/common/BrokerName/BrokerName';
+import AccountNumber from '@/components/common/AccountNumber/AccountNumber';
+import AccountStatus from '@/components/common/AccountStatus/AccountStatus';
+import Search from '@/components/Search/Search';
+import Pagination from '@/components/common/Pagination/Pagination';
+import useFetchData from '@/hooks/useFetchData';
 
 const AccountListBoard = () => {
-  const { search } = useLocation();
   const navigate = useNavigate();
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+
+  const [totalPages, setTotalPages] = useState(0);
+  const { data, parms } = useFetchData(accountApiService.getAccounts);
+  const [pageError, setPageError] = useState(false);
+  const accountsList = data;
   const [currentPage, setCurrentPage] = useState({
-    page: new URLSearchParams(search).get('_page') || 1,
-    limit: new URLSearchParams(search).get('_limit') || 20,
-    keyword: new URLSearchParams(search).get('q') || '',
-    sort: '',
-    order: 'asc',
+    ...parms,
   });
-  const { page, limit, sort, order } = currentPage;
-  const [word, setWord] = useState('');
+  const { sort, keyword, limit } = currentPage;
 
-  const [accountList, setAccountList] = useState([]);
-  const [error, setError] = useState(false);
-
+  const getTotal = async () => {
+    const getAccountsCount = await accountApiService.getAccountsCount({ keyword });
+    const acountTotal = Math.ceil(getAccountsCount / limit);
+    setTotalPages(acountTotal);
+  };
   useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const accountResponse = await accountApiService.getAccounts(currentPage);
-        setAccountList(accountResponse);
-      } catch (e) {
-        setError(true);
-        throw new Error(e);
-      }
-    };
-
-    fetchAccounts();
-  }, [currentPage, setCurrentPage]);
-
-  const handleSearch = () => {
-    setCurrentPage(prev => ({ ...prev, keyword: word }));
-    navigate(`?_page=${page}&_limit=${limit}&q=${word}`);
-  };
-  const handleChangeKeyword = e => {
-    const { value } = e.target;
-    setWord(value);
-  };
+    getTotal();
+  }, [currentPage]);
 
   const handleFilter = e => {
     const { name } = e.target;
+    const orderBy = searchParams.get('_order');
     if (sort === name) {
-      setCurrentPage(prev => ({ ...prev, order: order === 'asc' ? 'desc' : 'asc' }));
+      if (orderBy === 'asc') {
+        navigate(`?_sort=${name}&_order=desc`);
+        setCurrentPage(prev => ({ ...prev, order: 'desc' }));
+      } else {
+        navigate(`?_sort=${name}&_order=asc`);
+        setCurrentPage(prev => ({ ...prev, order: 'asc' }));
+      }
     } else {
+      navigate(`?_sort=${name}&_order=asc`);
       setCurrentPage(prev => ({ ...prev, sort: name, order: 'asc' }));
     }
   };
 
-  if (error) return <div>Error... </div>;
+  if (!data) return setPageError(true);
+  if (pageError) return <div>Error... </div>;
 
   return (
     <>
-      <Container maxW="md">
-        <Flex>
-          <Input name="search" value={word} onChange={handleChangeKeyword} />
-          <Button type="Button" onClick={handleSearch}>
-            검색
-          </Button>
+      <Container maxW="100%">
+        <Flex m="30px 0 10px 0">
+          <Flex gap={3}>
+            <Search currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          </Flex>
         </Flex>
       </Container>
-      <Table style={{ textAlign: 'center' }}>
+      <Table alignItems="center">
         <Thead>
           <Tr>
             <Th>고객명</Th>
             <Th>
-              <Button type="Button" onClick={handleFilter} name="broker_id">
+              <Button
+                type="Button"
+                onClick={handleFilter}
+                name="broker_id"
+                variant="ghost"
+                fontSize="xs"
+              >
                 브로커명
               </Button>
             </Th>
             <Th>계좌번호</Th>
             <Th onClick={handleFilter}>
-              <Button type="Button" onClick={handleFilter} name="status">
+              <Button
+                type="Button"
+                onClick={handleFilter}
+                name="status"
+                variant="ghost"
+                fontSize="xs"
+              >
                 계좌상태
               </Button>
             </Th>
@@ -86,7 +94,13 @@ const AccountListBoard = () => {
             <Th>평가금액</Th>
             <Th>입금금액</Th>
             <Th onClick={handleFilter}>
-              <Button type="Button" onClick={handleFilter} name="is_active">
+              <Button
+                type="Button"
+                onClick={handleFilter}
+                name="is_active"
+                variant="ghost"
+                fontSize="xs"
+              >
                 계좌활성화여부
               </Button>
             </Th>
@@ -94,44 +108,56 @@ const AccountListBoard = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {accountList.map(account => (
-            <Tr key={account.uuid}>
-              <Td>
-                <Link to={`${account.user_id}`}>
-                  <AccountUserName userId={account.user_id} />
-                </Link>
+          {data.length > 0 ? (
+            accountsList.map(account => (
+              <Tr key={account.uuid}>
+                <Td>
+                  <Link to={`${ROUTES.USER}/${account.user_id}`}>
+                    <AccountUserName userId={account.user_id} />
+                  </Link>
+                </Td>
+                <Td>
+                  <BrokerName brokerId={account.broker_id} />
+                </Td>
+                <Td>
+                  <Link to={`${ROUTES.ACCOUNT}/${account.user_id}`}>
+                    <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
+                  </Link>
+                </Td>
+                <Td>
+                  <AccountStatus status={account.status} />
+                </Td>
+                <Td>{account.name}</Td>
+                <Td
+                  style={
+                    account.assets > account.payments
+                      ? { color: 'red' }
+                      : account.assets === account.payments
+                      ? { color: 'black' }
+                      : { color: 'blue' }
+                  }
+                >
+                  {Number(account.assets).toLocaleString()}
+                </Td>
+                <Td>{Number(account.payments).toLocaleString()}</Td>
+                <Td>{account.is_active ? 'Y' : 'N'}</Td>
+                <Td>{new Date(account.created_at).toLocaleDateString()}</Td>
+              </Tr>
+            ))
+          ) : (
+            <Tr>
+              <Td style={{ textAlign: 'center', padding: '50px' }} colSpan={9}>
+                계좌 목록이 없습니다.
               </Td>
-              <Td>
-                <BrokerName brokerId={account.broker_id} />
-              </Td>
-              <Td>
-                <Link to={`${account.number}`}>
-                  <AccountNumber accountNumber={account.number} brokerId={account.broker_id} />
-                </Link>
-              </Td>
-              <Td>
-                <AccountStatusName status={account.status} />
-              </Td>
-              <Td>{account.name}</Td>
-              <Td
-                style={
-                  account.assets > account.payments
-                    ? { color: 'red' }
-                    : account.assets === account.payments
-                    ? { color: 'black' }
-                    : { color: 'blue' }
-                }
-              >
-                {Number(account.assets).toLocaleString()}
-              </Td>
-              <Td>{Number(account.payments).toLocaleString()}</Td>
-              <Td>{account.is_active ? 'Y' : 'N'}</Td>
-              <Td>{new Date(account.created_at).toLocaleDateString()}</Td>
             </Tr>
-          ))}
+          )}
         </Tbody>
       </Table>
+      <Flex m="30px 0 10px 0" justifyContent="center">
+        <Pagination totalPages={totalPages} parms={currentPage} setCurrentPage={setCurrentPage} />
+      </Flex>
     </>
   );
 };
+
 export default AccountListBoard;

@@ -1,8 +1,8 @@
 import http from '@/api/core';
 
 const accountApiService = {
-  getAccountsCount: async () => {
-    const accountsResponse = await http.get({ url: `/accounts` });
+  getAccountsCount: async ({ keyword } = { keyword: '' }) => {
+    const accountsResponse = await http.get({ url: `/accounts/?q=${keyword}` });
 
     return accountsResponse.length;
   },
