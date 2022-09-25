@@ -42,7 +42,7 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) navigate(ROUTES.HOME);
+    if (isAuthenticated) navigate(ROUTES.ACCOUNTS);
   }, [isAuthenticated, navigate]);
 
   return (
