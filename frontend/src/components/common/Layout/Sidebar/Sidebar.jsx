@@ -7,7 +7,7 @@ import { ROUTES } from '@/constants/routes';
 
 const siders = [
   { id: 1, name: '대시보드', keyword: 'home', link: ROUTES.HOME, icon: <CalendarIcon /> },
-  { id: 2, name: '계좌 목록', keyword: 'account', link: ROUTES.ACOOUNTS, icon: <HamburgerIcon /> },
+  { id: 2, name: '계좌 목록', keyword: 'account', link: ROUTES.ACCOUNTS, icon: <HamburgerIcon /> },
   { id: 3, name: '사용자 목록', keyword: 'user', link: ROUTES.USERSLIST, icon: <StarIcon /> },
   { id: 9999, name: '로그아웃', keyword: 'logout', link: ROUTES.LOGOUT, icon: <UnlockIcon /> },
 ];
