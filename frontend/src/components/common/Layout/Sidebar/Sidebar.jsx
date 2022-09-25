@@ -27,7 +27,7 @@ const Sidebar = ({ collapsed }) => {
       </Title>
       <VStack align="row" mt={5}>
         {siders.map(sider => (
-          <Link key={sider.id} to={`/${sider.link}`}>
+          <Link key={sider.id} to={`${sider.link}`}>
             <MenuBox
               h="40px"
               _hover={{
