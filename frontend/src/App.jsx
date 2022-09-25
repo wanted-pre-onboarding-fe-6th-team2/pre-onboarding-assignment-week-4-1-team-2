@@ -17,7 +17,7 @@ const App = () => (
       <Route path={ROUTES.HOME} element={<Login />} />
       <Route path={ROUTES.LOGIN} element={<Login />} />
       <Route path={ROUTES.LOGOUT} element={<Logout />} />
-      <Route path={ROUTES.ACOOUNTS} element={<AccountList />} />
+      <Route path={ROUTES.ACCOUNTS} element={<AccountList />} />
       <Route path={`${ROUTES.ACCOUNT}/:accountId`} element={<Account />} />
       <Route path={`${ROUTES.USER}/:userId`} element={<User />} />
       <Route path={ROUTES.USERSLIST} element={<UsersList />} />
